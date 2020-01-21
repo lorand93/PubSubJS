@@ -5,19 +5,19 @@
 		<title>iframe demo frame 1</title>
 		<script src="pubsub-bridge.js"></script>
 		<script>
-			function init( PubSub ){
+			function init( PubSubScId ){
 				var btn = document.getElementById('publish-thing');
 
-				setPubSub( PubSub );
-				console.log( 'frame 1 init - ', window.PubSub );
+				setPubSub( PubSubScId );
+				console.log( 'frame 1 init - ', window.PubSubScId );
 
-				PubSub.subscribe( 'hello-world', function( topic, data ){
+				PubSubScId.subscribe( 'hello-world', function( topic, data ){
 					console.log('hello-world received at frame 1 - ', data );
 				});
 
-				btn.onclick = function(){					
-					PubSub.publish( 'hello-world', 'from button in frame 1' );
-				};				
+				btn.onclick = function(){
+					PubSubScId.publish( 'hello-world', 'from button in frame 1' );
+				};
 			}
 		</script>
 	</head>

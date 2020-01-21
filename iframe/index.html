@@ -5,7 +5,7 @@
 		<title>iframe demo</title>
 		<script src="../src/pubsub.js"></script>
 		<script>
-			console.log( 'PubSub: ', PubSub );
+			console.log( 'PubSubScId: ', PubSubScId );
 		</script>
 	</head>
 	<body>
@@ -25,15 +25,15 @@
 					btn = document.getElementById('publish-thing');
 
 
-				f1w.init( PubSub );
-				f2w.init( PubSub );
+				f1w.init( PubSubScId );
+				f2w.init( PubSubScId );
 
-				PubSub.subscribe( 'hello-world', function( topic, data ){
+				PubSubScId.subscribe( 'hello-world', function( topic, data ){
 					console.log('hello world received at parent - ', data );
-				});				
+				});
 
-				btn.onclick = function(){					
-					PubSub.publish( 'hello-world', 'from button in parent document' );
+				btn.onclick = function(){
+					PubSubScId.publish( 'hello-world', 'from button in parent document' );
 				};
 			};
 		</script>

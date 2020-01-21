@@ -7,29 +7,29 @@
 
 (function (root, factory){
     'use strict';
-    if (typeof root.PubSub !== 'undefined') {
+    if (typeof root.PubSubScId !== 'undefined') {
         return;
     }
 
-    var PubSub = {};
-    root.PubSub = PubSub;
+    var PubSubScId = {};
+    root.PubSubScId = PubSubScId;
     var define = root.define;
-    factory(PubSub);
+    factory(PubSubScId);
 
     // AMD support
     if (typeof define === 'function' && define.amd){
-        define(function() { return PubSub; });
+        define(function() { return PubSubScId; });
 
         // CommonJS and Node.js module support
     } else if (typeof exports === 'object'){
         if (module !== undefined && module.exports) {
-            exports = module.exports = PubSub; // Node.js specific `module.exports`
+            exports = module.exports = PubSubScId; // Node.js specific `module.exports`
         }
-        exports.PubSub = PubSub; // CommonJS module 1.1.1 spec
-        module.exports = exports = PubSub; // CommonJS
+        exports.PubSubScId = PubSubScId; // CommonJS module 1.1.1 spec
+        module.exports = exports = PubSubScId; // CommonJS
     }
 
-}(( typeof window === 'object' && window ) || this, function (PubSub){
+}(( typeof window === 'object' && window ) || this, function (PubSubScId){
     'use strict';
 
     var messages = {},
@@ -143,8 +143,8 @@
      * @param {} data The data to pass to subscribers
      * @return { Boolean }
      */
-    PubSub.publish = function( message, data ){
-        return publish( message, data, false, PubSub.immediateExceptions );
+    PubSubScId.publish = function( message, data ){
+        return publish( message, data, false, PubSubScId.immediateExceptions );
     };
 
     /**
@@ -155,8 +155,8 @@
      * @param {} data The data to pass to subscribers
      * @return { Boolean }
      */
-    PubSub.publishSync = function( message, data ){
-        return publish( message, data, true, PubSub.immediateExceptions );
+    PubSubScId.publishSync = function( message, data ){
+        return publish( message, data, true, PubSubScId.immediateExceptions );
     };
 
     /**
@@ -167,7 +167,7 @@
      * @param { Function } func The function to call when a new message is published
      * @return { String }
      */
-    PubSub.subscribe = function( message, func ){
+    PubSubScId.subscribe = function( message, func ){
         if ( typeof func !== 'function'){
             return false;
         }
@@ -194,15 +194,15 @@
      * @alias subscribeOnce
      * @param { String } message The message to subscribe to
      * @param { Function } func The function to call when a new message is published
-     * @return { PubSub }
+     * @return { PubSubScId }
      */
-    PubSub.subscribeOnce = function( message, func ){
-        var token = PubSub.subscribe( message, function(){
+    PubSubScId.subscribeOnce = function( message, func ){
+        var token = PubSubScId.subscribe( message, function(){
             // before func apply, unsubscribe message
-            PubSub.unsubscribe( token );
+            PubSubScId.unsubscribe( token );
             func.apply( this, arguments );
         });
-        return PubSub;
+        return PubSubScId;
     };
 
     /**
@@ -211,7 +211,7 @@
      * @public
      * @alias clearAllSubscriptions
      */
-    PubSub.clearAllSubscriptions = function clearAllSubscriptions(){
+    PubSubScId.clearAllSubscriptions = function clearAllSubscriptions(){
         messages = {};
     };
 
@@ -222,7 +222,7 @@
      * @alias clearAllSubscriptions
      * @return { int }
      */
-    PubSub.clearSubscriptions = function clearSubscriptions(topic){
+    PubSubScId.clearSubscriptions = function clearSubscriptions(topic){
         var m;
         for (m in messages){
             if (messages.hasOwnProperty(m) && m.indexOf(topic) === 0){
@@ -238,7 +238,7 @@
      * @alias countSubscriptions
      * @return { Array }
     */
-    PubSub.countSubscriptions = function countSubscriptions(topic){
+    PubSubScId.countSubscriptions = function countSubscriptions(topic){
         var m;
         var count = 0;
         for (m in messages){
@@ -256,7 +256,7 @@
      * @public
      * @alias getSubscriptions
     */
-    PubSub.getSubscriptions = function getSubscriptions(topic){
+    PubSubScId.getSubscriptions = function getSubscriptions(topic){
         var m;
         var list = [];
         for (m in messages){
@@ -280,14 +280,14 @@
      * @alias subscribeOnce
      * @param { String | Function } value A token, function or topic to unsubscribe from
      * @example // Unsubscribing with a token
-     * var token = PubSub.subscribe('mytopic', myFunc);
-     * PubSub.unsubscribe(token);
+     * var token = PubSubScId.subscribe('mytopic', myFunc);
+     * PubSubScId.unsubscribe(token);
      * @example // Unsubscribing with a function
-     * PubSub.unsubscribe(myFunc);
+     * PubSubScId.unsubscribe(myFunc);
      * @example // Unsubscribing from a topic
-     * PubSub.unsubscribe('mytopic');
+     * PubSubScId.unsubscribe('mytopic');
      */
-    PubSub.unsubscribe = function(value){
+    PubSubScId.unsubscribe = function(value){
         var descendantTopicExists = function(topic) {
                 var m;
                 for ( m in messages ){
@@ -306,7 +306,7 @@
             m, message, t;
 
         if (isTopic){
-            PubSub.clearSubscriptions(value);
+            PubSubScId.clearSubscriptions(value);
             return;
         }
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var PubSub = require('../src/pubsub'),
+var PubSubScId = require('../src/pubsub'),
     assert = require('referee').assert,
     sinon = require('sinon');
 
@@ -15,11 +15,11 @@ describe( 'Bug 9, publish method', function() {
             subscriber3 = sinon.spy(),
             clock = sinon.useFakeTimers();
 
-        PubSub.subscribe( 'a.b.c', subscriber1 );
-        PubSub.subscribe( 'a.b', subscriber2 );
-        PubSub.subscribe( 'a', subscriber3 );
+        PubSubScId.subscribe( 'a.b.c', subscriber1 );
+        PubSubScId.subscribe( 'a.b', subscriber2 );
+        PubSubScId.subscribe( 'a', subscriber3 );
 
-        PubSub.publish( 'a.b.c.d' );
+        PubSubScId.publish( 'a.b.c.d' );
 
         clock.tick(1);
 
@@ -37,8 +37,8 @@ describe( 'Bug 9, publish method', function() {
             subscriber = sinon.spy(),
             clock = sinon.useFakeTimers();
 
-        PubSub.subscribe(rootTopic, subscriber);
-        PubSub.publish(rootTopic + '.d');
+        PubSubScId.subscribe(rootTopic, subscriber);
+        PubSubScId.publish(rootTopic + '.d');
 
         clock.tick(1);
 

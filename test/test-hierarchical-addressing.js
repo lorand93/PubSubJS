@@ -1,6 +1,6 @@
 'use strict';
 
-var PubSub = global.PubSub || require('../src/pubsub'),
+var PubSubScId = global.PubSubScId || require('../src/pubsub'),
     TestHelper = global.TestHelper || require('../test/helper'),
     assert = require('referee').assert,
     sinon = require('sinon');
@@ -20,9 +20,9 @@ describe( 'Hierarchical addressing', function () {
             data = TestHelper.getUniqueString();
 
 
-        PubSub.subscribe( messages[0], spy ); //This should be called
-        PubSub.subscribe( messages[1], spy );
-        PubSub.publish( messages[0], data );
+        PubSubScId.subscribe( messages[0], spy ); //This should be called
+        PubSubScId.subscribe( messages[1], spy );
+        PubSubScId.publish( messages[0], data );
 
         assert.equals( spy.callCount, 0 );
         this.clock.tick(1);
@@ -38,9 +38,9 @@ describe( 'Hierarchical addressing', function () {
             data = TestHelper.getUniqueString();
 
 
-        PubSub.subscribe( messages[0], spy ); //This should be called
-        PubSub.subscribe( messages[1], spy ); //This should be called
-        PubSub.publish( messages[1], data );
+        PubSubScId.subscribe( messages[0], spy ); //This should be called
+        PubSubScId.subscribe( messages[1], spy ); //This should be called
+        PubSubScId.publish( messages[1], data );
 
         assert.equals( spy.callCount, 0 );
         this.clock.tick(1);
@@ -57,10 +57,10 @@ describe( 'Hierarchical addressing', function () {
             data = TestHelper.getUniqueString();
 
 
-        PubSub.subscribe( messages[0], spy ); //This should be called
-        PubSub.subscribe( messages[1], spy ); //This should be called
-        PubSub.subscribe( messages[2], spy );
-        PubSub.publish( messages[1], data );
+        PubSubScId.subscribe( messages[0], spy ); //This should be called
+        PubSubScId.subscribe( messages[1], spy ); //This should be called
+        PubSubScId.subscribe( messages[2], spy );
+        PubSubScId.publish( messages[1], data );
 
         assert.equals( spy.callCount, 0 );
         this.clock.tick(1);
@@ -76,10 +76,10 @@ describe( 'Hierarchical addressing', function () {
             data = TestHelper.getUniqueString();
 
 
-        PubSub.subscribe( messages[0], spy ); //This should be called
-        PubSub.subscribe( messages[1], spy ); //This should be called
-        PubSub.subscribe( messages[2], spy ); //This should be called
-        PubSub.publish( messages[2], data );
+        PubSubScId.subscribe( messages[0], spy ); //This should be called
+        PubSubScId.subscribe( messages[1], spy ); //This should be called
+        PubSubScId.subscribe( messages[2], spy ); //This should be called
+        PubSubScId.publish( messages[2], data );
 
         assert.equals( spy.callCount, 0 );
         this.clock.tick(1);
@@ -101,12 +101,12 @@ describe( 'Hierarchical addressing', function () {
             spy = sinon.spy(),
             data = TestHelper.getUniqueString();
 
-        PubSub.subscribe( messages[0], spy ); //This should be called
-        PubSub.subscribe( messages[1], spy ); //This should be called
-        PubSub.subscribe( messages[2], spy ); //This should be called
-        PubSub.subscribe( messages[3], spy );
-        PubSub.subscribe( messages[4], spy );
-        PubSub.publish( messages[2], data );
+        PubSubScId.subscribe( messages[0], spy ); //This should be called
+        PubSubScId.subscribe( messages[1], spy ); //This should be called
+        PubSubScId.subscribe( messages[2], spy ); //This should be called
+        PubSubScId.subscribe( messages[3], spy );
+        PubSubScId.subscribe( messages[4], spy );
+        PubSubScId.publish( messages[2], data );
 
         assert.equals( spy.callCount, 0 );
         this.clock.tick(1);
@@ -130,14 +130,14 @@ describe( 'Hierarchical addressing', function () {
             data = TestHelper.getUniqueString();
 
 
-        PubSub.subscribe( messages[0], spy ); //This should be called
-        PubSub.subscribe( messages[1], spy ); //This should be called
-        PubSub.subscribe( messages[2], spy ); //This should be called
-        PubSub.subscribe( messages[3], spy ); //This should be called
-        PubSub.subscribe( messages[4], spy ); //This should be called
-        PubSub.subscribe( messages[5], spy ); //This should be called
-        PubSub.subscribe( messages[6], spy );
-        PubSub.publish( messages[4], data );
+        PubSubScId.subscribe( messages[0], spy ); //This should be called
+        PubSubScId.subscribe( messages[1], spy ); //This should be called
+        PubSubScId.subscribe( messages[2], spy ); //This should be called
+        PubSubScId.subscribe( messages[3], spy ); //This should be called
+        PubSubScId.subscribe( messages[4], spy ); //This should be called
+        PubSubScId.subscribe( messages[5], spy ); //This should be called
+        PubSubScId.subscribe( messages[6], spy );
+        PubSubScId.publish( messages[4], data );
 
         assert.equals( spy.callCount, 0 );
         this.clock.tick(1);
@@ -153,14 +153,14 @@ describe( 'Hierarchical addressing', function () {
             token;
 
 
-        PubSub.subscribe( messages[0], spy ); //This should be called
-        PubSub.subscribe( messages[2], spy ); //This should be called
+        PubSubScId.subscribe( messages[0], spy ); //This should be called
+        PubSubScId.subscribe( messages[2], spy ); //This should be called
 
-        token = PubSub.subscribe( messages[1], spy );
+        token = PubSubScId.subscribe( messages[1], spy );
 
-        PubSub.unsubscribe( token ); //Take out middle child
+        PubSubScId.unsubscribe( token ); //Take out middle child
 
-        PubSub.publish( messages[2], data );
+        PubSubScId.publish( messages[2], data );
 
         assert.equals( spy.callCount, 0 );
         this.clock.tick(1);
@@ -172,10 +172,10 @@ describe( 'Hierarchical addressing', function () {
     it('unsubscribe method should return tokens when succesfully removing namespaced message', function(){
         var func = function(){ return undefined; },
             messages = ['playlist.music', 'playlist.music.jazz'],
-            token1 = PubSub.subscribe( messages[0], func),
-            token2 = PubSub.subscribe( messages[1], func ),
-            result1 = PubSub.unsubscribe( token1 ),
-            result2 = PubSub.unsubscribe( token2 );
+            token1 = PubSubScId.subscribe( messages[0], func),
+            token2 = PubSubScId.subscribe( messages[1], func ),
+            result1 = PubSubScId.unsubscribe( token1 ),
+            result2 = PubSubScId.unsubscribe( token2 );
 
         assert.equals( result1, token1 );
         assert.equals( result2, token2 );
@@ -187,13 +187,13 @@ describe( 'Hierarchical addressing', function () {
             messages = ['playlist', 'playlist.music', 'playlist.music.jazz'],
             token;
 
-        token = PubSub.subscribe( messages[0], spy ); //Gets unsubscribed
-        PubSub.subscribe( messages[1], spy ); //This should be called
-        PubSub.subscribe( messages[2], spy ); //This should be called
+        token = PubSubScId.subscribe( messages[0], spy ); //Gets unsubscribed
+        PubSubScId.subscribe( messages[1], spy ); //This should be called
+        PubSubScId.subscribe( messages[2], spy ); //This should be called
 
-        PubSub.unsubscribe( token );
+        PubSubScId.unsubscribe( token );
 
-        PubSub.publish( messages[2], data );
+        PubSubScId.publish( messages[2], data );
 
         assert.equals( spy.callCount, 0 );
         this.clock.tick(1);

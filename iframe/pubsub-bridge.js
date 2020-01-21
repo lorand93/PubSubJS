@@ -1,3 +1,3 @@
-function setPubSub( PubSub ){
-	window.PubSub = PubSub;
+function setPubSub( PubSubScId ){
+	window.PubSubScId = PubSubScId;
 }

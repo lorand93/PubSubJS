@@ -1,6 +1,6 @@
 'use strict';
 
-var PubSub = require('../src/pubsub'),
+var PubSubScId = require('../src/pubsub'),
     TestHelper = require('../test/helper'),
     assert = require('referee').assert,
     refute = require('referee').refute,
@@ -9,24 +9,24 @@ var PubSub = require('../src/pubsub'),
 describe( 'publish method', function () {
     it('should return false if there are no subscribers', function(){
         var message = TestHelper.getUniqueString();
-        assert.equals( PubSub.publish( message ), false );
+        assert.equals( PubSubScId.publish( message ), false );
     });
 
     it('should return true if there are subscribers to a message', function(){
         var message = TestHelper.getUniqueString(),
             func = function(){ return undefined; };
 
-        PubSub.subscribe( message, func );
-        assert( PubSub.publish( message ) );
+        PubSubScId.subscribe( message, func );
+        assert( PubSubScId.publish( message ) );
     });
 
     it('should return false, when there are no longer any subscribers to a message', function(){
         var message = TestHelper.getUniqueString(),
             func = function(){ return undefined; },
-            token = PubSub.subscribe(message, func);
+            token = PubSubScId.subscribe(message, func);
 
-        PubSub.unsubscribe(token);
-        assert.equals( PubSub.publish(message), false );
+        PubSubScId.unsubscribe(token);
+        assert.equals( PubSubScId.publish(message), false );
     });
 
     it('should call all subscribers for a message exactly once', function(){
@@ -34,10 +34,10 @@ describe( 'publish method', function () {
             spy1 = sinon.spy(),
             spy2 = sinon.spy();
 
-        PubSub.subscribe( message, spy1 );
-        PubSub.subscribe( message, spy2 );
+        PubSubScId.subscribe( message, spy1 );
+        PubSubScId.subscribe( message, spy2 );
 
-        PubSub.publishSync( message, 'my payload' ); // force sync here, easier to test
+        PubSubScId.publishSync( message, 'my payload' ); // force sync here, easier to test
 
         assert( spy1.calledOnce );
         assert( spy2.calledOnce );
@@ -49,10 +49,10 @@ describe( 'publish method', function () {
             spy1 = sinon.spy(),
             spy2 = sinon.spy();
 
-        PubSub.subscribe( message1, spy1 );
-        PubSub.subscribe( message2, spy2 );
+        PubSubScId.subscribe( message1, spy1 );
+        PubSubScId.subscribe( message2, spy2 );
 
-        PubSub.publishSync( message1, 'some payload' );
+        PubSubScId.publishSync( message1, 'some payload' );
 
         // ensure the first subscriber IS called
         assert(	 spy1.called );
@@ -64,8 +64,8 @@ describe( 'publish method', function () {
         var message = TestHelper.getUniqueString(),
             spy = sinon.spy();
 
-        PubSub.subscribe( message, spy );
-        PubSub.publishSync( message, 'some payload' );
+        PubSubScId.subscribe( message, spy );
+        PubSubScId.publishSync( message, 'some payload' );
 
         assert( spy.calledWith( message ) );
     });
@@ -75,8 +75,8 @@ describe( 'publish method', function () {
             spy = sinon.spy(),
             data = TestHelper.getUniqueString();
 
-        PubSub.subscribe( message, spy );
-        PubSub.publishSync( message, data );
+        PubSubScId.subscribe( message, spy );
+        PubSubScId.publishSync( message, data );
 
         assert( spy.calledWith( message, data ) );
     });
@@ -87,8 +87,8 @@ describe( 'publish method', function () {
             data = TestHelper.getUniqueString(),
             clock = sinon.useFakeTimers();
 
-        PubSub.subscribe( message, spy );
-        PubSub.publish( message, data );
+        PubSubScId.subscribe( message, spy );
+        PubSubScId.publish( message, data );
 
         assert.equals( spy.callCount, 0 );
         clock.tick(1);
@@ -103,8 +103,8 @@ describe( 'publish method', function () {
             spy = sinon.spy(),
             data = TestHelper.getUniqueString();
 
-        PubSub.subscribe( message, spy );
-        PubSub.publishSync( message, data );
+        PubSubScId.subscribe( message, spy );
+        PubSubScId.publishSync( message, data );
 
         assert.equals( spy.callCount, 1 );
     });
@@ -118,12 +118,12 @@ describe( 'publish method', function () {
             spy2 = sinon.spy(),
             clock = sinon.useFakeTimers();
 
-        PubSub.subscribe( message, func1 );
-        PubSub.subscribe( message, spy1 );
-        PubSub.subscribe( message, spy2 );
+        PubSubScId.subscribe( message, func1 );
+        PubSubScId.subscribe( message, spy1 );
+        PubSubScId.subscribe( message, spy2 );
 
         assert.exception( function(){
-            PubSub.publishSync( message, 'some data' );
+            PubSubScId.publishSync( message, 'some data' );
             clock.tick(1);
         });
 
@@ -143,20 +143,20 @@ describe( 'publish method', function () {
             spy2 = sinon.spy();
 
 
-        PubSub.subscribe( message, func1 );
-        PubSub.subscribe( message, spy1 );
+        PubSubScId.subscribe( message, func1 );
+        PubSubScId.subscribe( message, spy1 );
 
-        PubSub.immediateExceptions = true;
+        PubSubScId.immediateExceptions = true;
 
         assert.exception( function(){
-            PubSub.publishSync( message, 'some data' );
+            PubSubScId.publishSync( message, 'some data' );
         });
 
         refute( spy1.called );
         refute( spy2.called );
 
-        // make sure we restore PubSub to it's original state
-        delete PubSub.immediateExceptions;
+        // make sure we restore PubSubScId to it's original state
+        delete PubSubScId.immediateExceptions;
     });
 
     it('should fail immediately on exceptions in namespaces when immediateExceptions is true',  function(){
@@ -165,41 +165,41 @@ describe( 'publish method', function () {
             },
             spy1 = sinon.spy();
 
-        PubSub.subscribe( 'buy', func1 );
-        PubSub.subscribe( 'buy', spy1 );
+        PubSubScId.subscribe( 'buy', func1 );
+        PubSubScId.subscribe( 'buy', spy1 );
 
-        PubSub.immediateExceptions = true;
+        PubSubScId.immediateExceptions = true;
 
         assert.exception( function(){
-            PubSub.publishSync( 'buy.tomatoes', 'some data' );
+            PubSubScId.publishSync( 'buy.tomatoes', 'some data' );
         });
 
         refute( spy1.called );
 
-        // make sure we restore PubSub to it's original state
-        delete PubSub.immediateExceptions;
+        // make sure we restore PubSubScId to it's original state
+        delete PubSubScId.immediateExceptions;
     });
 
     it('should call all subscribers, even when there are unsubscriptions within', function(done){
         var topic = TestHelper.getUniqueString(),
             spy1 = sinon.spy(),
             func1 = function func1(){
-                PubSub.unsubscribe(func1);
+                PubSubScId.unsubscribe(func1);
                 spy1();
             },
 
             spy2 = sinon.spy(),
             func2 = function func2(){
-                PubSub.unsubscribe(func2);
+                PubSubScId.unsubscribe(func2);
                 spy2();
             },
 
             clock = sinon.useFakeTimers();
 
-        PubSub.subscribe(topic, func1);
-        PubSub.subscribe(topic, func2);
+        PubSubScId.subscribe(topic, func1);
+        PubSubScId.subscribe(topic, func2);
 
-        PubSub.publish(topic, 'some data');
+        PubSubScId.publish(topic, 'some data');
         clock.tick(1);
 
         assert(spy1.called, 'expected spy1 to be called');

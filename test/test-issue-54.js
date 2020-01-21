@@ -1,6 +1,6 @@
 'use strict';
 
-var PubSub = require('../src/pubsub'),
+var PubSubScId = require('../src/pubsub'),
     TestHelper = require('../test/helper'),
     assert = require('referee').assert,
     sinon = require('sinon');
@@ -16,7 +16,7 @@ describe( 'Issue 54, publish method', function () {
             token1,
             token1Unsubscribed = false,
             subscriber1 = function(){
-                PubSub.unsubscribe(token1);
+                PubSubScId.unsubscribe(token1);
                 token1Unsubscribed = true;
             },
             spy1 = sinon.spy(subscriber1),
@@ -24,11 +24,11 @@ describe( 'Issue 54, publish method', function () {
             spy3 = sinon.spy(),
             clock = sinon.useFakeTimers();
 
-        token1 = PubSub.subscribe( topic, spy1 );
-        PubSub.subscribe( topic, spy2 );
-        PubSub.subscribe( topic, spy3 );
+        token1 = PubSubScId.subscribe( topic, spy1 );
+        PubSubScId.subscribe( topic, spy2 );
+        PubSubScId.subscribe( topic, spy3 );
 
-        PubSub.publish( topic );
+        PubSubScId.publish( topic );
 
         clock.tick(1);
 

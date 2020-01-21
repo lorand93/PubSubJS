@@ -1,6 +1,6 @@
 'use strict';
 
-var PubSub = require('../src/pubsub'),
+var PubSubScId = require('../src/pubsub'),
     TestHelper = require('../test/helper'),
     assert = require('referee').assert,
     refute = require('referee').refute,
@@ -10,25 +10,25 @@ describe( 'unsubscribe method', function() {
     it('should return token when succesful', function(){
         var func = function(){ return undefined; },
             message = TestHelper.getUniqueString(),
-            token = PubSub.subscribe( message, func),
-            result = PubSub.unsubscribe( token );
+            token = PubSubScId.subscribe( message, func),
+            result = PubSubScId.unsubscribe( token );
 
         assert.equals( result, token );
     });
 
     it('should return false when unsuccesful', function(){
         var unknownToken = 'my unknown token',
-            result = PubSub.unsubscribe( unknownToken ),
+            result = PubSubScId.unsubscribe( unknownToken ),
             func = function(){ return undefined; },
             message = TestHelper.getUniqueString(),
-            token = PubSub.subscribe( message, func );
+            token = PubSubScId.subscribe( message, func );
 
         // first, let's try a completely unknown token
         assert.equals( result, false );
 
         // now let's try unsubscribing the same method twice
-        PubSub.unsubscribe( token );
-        assert.equals( PubSub.unsubscribe( token ), false );
+        PubSubScId.unsubscribe( token );
+        assert.equals( PubSubScId.unsubscribe( token ), false );
     });
 
     it('with function argument should return true when succesful', function(){
@@ -36,8 +36,8 @@ describe( 'unsubscribe method', function() {
             message = TestHelper.getUniqueString(),
             result;
 
-        PubSub.subscribe( message, func);
-        result = PubSub.unsubscribe( func );
+        PubSubScId.subscribe( message, func);
+        result = PubSubScId.unsubscribe( func );
 
         assert.equals( result, true );
     });
@@ -46,22 +46,22 @@ describe( 'unsubscribe method', function() {
         var func = function(){ return undefined; },
             message = TestHelper.getUniqueString(),
             unknownToken = 'my unknown token',
-            result = PubSub.unsubscribe( unknownToken );
+            result = PubSubScId.unsubscribe( unknownToken );
 
         // first, let's try a completely unknown token
 
         assert.equals( result, false );
 
         // now let's try unsubscribing the same method twice
-        PubSub.subscribe( message, func );
-        PubSub.subscribe( message, func );
-        PubSub.subscribe( message, func );
+        PubSubScId.subscribe( message, func );
+        PubSubScId.subscribe( message, func );
+        PubSubScId.subscribe( message, func );
 
         // unsubscribe once, this should remove all subscriptions for message
-        PubSub.unsubscribe( func );
+        PubSubScId.unsubscribe( func );
 
         // unsubscribe again
-        assert.equals( PubSub.unsubscribe( func ), false );
+        assert.equals( PubSubScId.unsubscribe( func ), false );
     });
 
     it('with topic argument, must clear all exactly matched subscriptions', function(){
@@ -69,12 +69,12 @@ describe( 'unsubscribe method', function() {
             spy1 = sinon.spy(),
             spy2 = sinon.spy();
 
-        PubSub.subscribe(topic, spy1);
-        PubSub.subscribe(topic, spy2);
+        PubSubScId.subscribe(topic, spy1);
+        PubSubScId.subscribe(topic, spy2);
 
-        PubSub.unsubscribe(topic);
+        PubSubScId.unsubscribe(topic);
 
-        PubSub.publishSync(topic, TestHelper.getUniqueString());
+        PubSubScId.publishSync(topic, TestHelper.getUniqueString());
 
         refute(spy1.called);
         refute(spy2.called);
@@ -86,13 +86,13 @@ describe( 'unsubscribe method', function() {
             spy1 = sinon.spy(),
             spy2 = sinon.spy();
 
-        PubSub.subscribe(topic1, spy1);
-        PubSub.subscribe(topic2, spy2);
+        PubSubScId.subscribe(topic1, spy1);
+        PubSubScId.subscribe(topic2, spy2);
 
-        PubSub.unsubscribe(topic1);
+        PubSubScId.unsubscribe(topic1);
 
-        PubSub.publishSync(topic1, TestHelper.getUniqueString());
-        PubSub.publishSync(topic2, TestHelper.getUniqueString());
+        PubSubScId.publishSync(topic1, TestHelper.getUniqueString());
+        PubSubScId.publishSync(topic2, TestHelper.getUniqueString());
 
         refute(spy1.called);
         assert(spy2.called);
@@ -107,13 +107,13 @@ describe( 'unsubscribe method', function() {
             spyB = sinon.spy(),
             spyC = sinon.spy();
 
-        PubSub.subscribe(topicA, spyA);
-        PubSub.subscribe(topicB, spyB);
-        PubSub.subscribe(topicC, spyC);
+        PubSubScId.subscribe(topicA, spyA);
+        PubSubScId.subscribe(topicB, spyB);
+        PubSubScId.subscribe(topicC, spyC);
 
-        PubSub.unsubscribe(topicB);
+        PubSubScId.unsubscribe(topicB);
 
-        PubSub.publishSync(topicC, TestHelper.getUniqueString());
+        PubSubScId.publishSync(topicC, TestHelper.getUniqueString());
 
         assert(spyA.called);
         refute(spyB.called);
@@ -129,14 +129,14 @@ describe( 'unsubscribe method', function() {
             spyC = sinon.spy();
 
         // subscribe only to  children:
-        PubSub.subscribe(topicB, spyB);
-        PubSub.subscribe(topicC, spyC);
+        PubSubScId.subscribe(topicB, spyB);
+        PubSubScId.subscribe(topicC, spyC);
 
         // but unsubscribe from a parent:
-        PubSub.unsubscribe(topicA);
+        PubSubScId.unsubscribe(topicA);
 
-        PubSub.publishSync(topicB, TestHelper.getUniqueString());
-        PubSub.publishSync(topicC, TestHelper.getUniqueString());
+        PubSubScId.publishSync(topicB, TestHelper.getUniqueString());
+        PubSubScId.publishSync(topicC, TestHelper.getUniqueString());
 
         refute(spyB.called);
         refute(spyC.called);
@@ -146,14 +146,14 @@ describe( 'unsubscribe method', function() {
         refute.exception(function(){
             var topic = TestHelper.getUniqueString(),
                 sub1 = function(){
-                    PubSub.unsubscribe(sub1);
+                    PubSubScId.unsubscribe(sub1);
                 },
                 sub2 = function(){ return undefined; };
 
-            PubSub.subscribe( topic, sub1 );
-            PubSub.subscribe( topic, sub2 );
+            PubSubScId.subscribe( topic, sub1 );
+            PubSubScId.subscribe( topic, sub2 );
 
-            PubSub.publishSync( topic, 'hello world!' );
+            PubSubScId.publishSync( topic, 'hello world!' );
         });
     });
 });

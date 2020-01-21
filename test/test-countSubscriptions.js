@@ -1,6 +1,6 @@
 'use strict';
 
-var PubSub = require('../src/pubsub'),
+var PubSubScId = require('../src/pubsub'),
     TestHelper = require('./helper'),
     assert = require('referee').assert,
     sinon = require('sinon');
@@ -10,9 +10,9 @@ describe('test-countSubscriptions method', function () {
         var topic = TestHelper.getUniqueString(),
             spy1 = sinon.spy();
 
-        PubSub.subscribe(topic, spy1);
+        PubSubScId.subscribe(topic, spy1);
 
-        var counts = PubSub.countSubscriptions(topic);
+        var counts = PubSubScId.countSubscriptions(topic);
 
         assert.equals(counts,1);
     });

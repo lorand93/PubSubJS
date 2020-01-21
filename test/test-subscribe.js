@@ -1,6 +1,6 @@
 'use strict';
 
-var PubSub = require('../src/pubsub'),
+var PubSubScId = require('../src/pubsub'),
     TestHelper = require('../test/helper'),
     assert = require('referee').assert,
     refute = require('referee').refute;
@@ -9,7 +9,7 @@ describe( 'subscribe method', function() {
     it('should return token as String', function(){
         var func = function(){ return undefined; },
             message = TestHelper.getUniqueString(),
-            token = PubSub.subscribe( message , func );
+            token = PubSubScId.subscribe( message , func );
 
         assert.isString( token );
     });
@@ -23,7 +23,7 @@ describe( 'subscribe method', function() {
 
         // build an array of tokens
         for ( i = 0; i < iterations; i++ ){
-            tokens.push( PubSub.subscribe( message, func ) );
+            tokens.push( PubSubScId.subscribe( message, func ) );
         }
         // make sure all tokens are different
         TestHelper.assertAllTokensDifferent( tokens );
@@ -37,7 +37,7 @@ describe( 'subscribe method', function() {
 
         // build an array of tokens
         for ( i = 0; i < messages.length; i++ ){
-            tokens.push( PubSub.subscribe( messages[i], func ) );
+            tokens.push( PubSubScId.subscribe( messages[i], func ) );
         }
         // make sure all tokens are different
         TestHelper.assertAllTokensDifferent( tokens );
@@ -57,7 +57,7 @@ describe( 'subscribe method', function() {
 
         // build an array of tokens, passing in a different function for each subscription
         for ( i = 0; i < iterations; i++ ){
-            tokens.push( PubSub.subscribe( message, bakeFunc( i ) ) );
+            tokens.push( PubSubScId.subscribe( message, bakeFunc( i ) ) );
         }
 
         // make sure all tokens are different
@@ -70,7 +70,7 @@ describe( 'subscribe method', function() {
             i;
 
         for ( i = 0; i < invalidSubscribers.length; i++ ){
-            assert.equals(PubSub.subscribe(topic, invalidSubscribers[i]), false);
+            assert.equals(PubSubScId.subscribe(topic, invalidSubscribers[i]), false);
         }
 
         assert.equals(i, invalidSubscribers.length);
@@ -82,11 +82,11 @@ describe( 'subscribe method', function() {
             i;
 
         for (i = 0; i < invalidSubscribers.length; i++){
-            PubSub.subscribe(topic, invalidSubscribers[i]);
+            PubSubScId.subscribe(topic, invalidSubscribers[i]);
         }
 
         refute.exception(function(){
-            PubSub.publish(topic, TestHelper.getUniqueString());
+            PubSubScId.publish(topic, TestHelper.getUniqueString());
         });
     });
 });

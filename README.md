@@ -52,10 +52,10 @@ There are several ways of getting PubSubJS
 First you have to import the module:
 
 ```javascript
-import PubSub from 'pubsub-js'
+import PubSubScId from 'pubsub-js'
 
 // or when using CommonJS
-const PubSub = require('pubsub-js');
+const PubSubScId = require('pubsub-js');
 ```
 
 ### Basic example
@@ -69,16 +69,16 @@ var mySubscriber = function (msg, data) {
 // add the function to the list of subscribers for a particular topic
 // we're keeping the returned token, in order to be able to unsubscribe
 // from the topic later on
-var token = PubSub.subscribe('MY TOPIC', mySubscriber);
+var token = PubSubScId.subscribe('MY TOPIC', mySubscriber);
 
 // publish a topic asynchronously
-PubSub.publish('MY TOPIC', 'hello world!');
+PubSubScId.publish('MY TOPIC', 'hello world!');
 
 // publish a topic synchronously, which is faster in some environments,
 // but will get confusing when one topic triggers new topics in the
 // same execution chain
 // USE WITH CAUTION, HERE BE DRAGONS!!!
-PubSub.publishSync('MY TOPIC', 'hello world!');
+PubSubScId.publishSync('MY TOPIC', 'hello world!');
 ```
 
 ### Cancel specific subscription
@@ -92,10 +92,10 @@ var mySubscriber = function (msg, data) {
 // add the function to the list of subscribers to a particular topic
 // we're keeping the returned token, in order to be able to unsubscribe
 // from the topic later on
-var token = PubSub.subscribe('MY TOPIC', mySubscriber);
+var token = PubSubScId.subscribe('MY TOPIC', mySubscriber);
 
 // unsubscribe this subscriber from this topic
-PubSub.unsubscribe(token);
+PubSubScId.unsubscribe(token);
 ```
 
 ### Cancel all subscriptions for a function
@@ -107,17 +107,17 @@ var mySubscriber = function(msg, data) {
 };
 
 // unsubscribe mySubscriber from ALL topics
-PubSub.unsubscribe(mySubscriber);
+PubSubScId.unsubscribe(mySubscriber);
 ```
 
 ### Clear all subscriptions for a topic
 
 ```javascript
-PubSub.subscribe('a', myFunc1);
-PubSub.subscribe('a.b', myFunc2);
-PubSub.subscribe('a.b.c', myFunc3);
+PubSubScId.subscribe('a', myFunc1);
+PubSubScId.subscribe('a.b', myFunc2);
+PubSubScId.subscribe('a.b.c', myFunc3);
 
-PubSub.unsubscribe('a.b');
+PubSubScId.unsubscribe('a.b');
 // no further notifications for 'a.b' and 'a.b.c' topics
 // notifications for 'a' will still get published
 ```
@@ -125,21 +125,21 @@ PubSub.unsubscribe('a.b');
 ### Clear all subscriptions
 
 ```javascript
-PubSub.clearAllSubscriptions();
+PubSubScId.clearAllSubscriptions();
 // all subscriptions are removed
 ```
 
 ### Get Subscriptions
 
 ```javascript
-PubSub.getSubscriptions('token');
+PubSubScId.getSubscriptions('token');
 // subscriptions by token from all topics
 ```
 
 ### Count Subscriptions
 
 ```javascript
-PubSub.countSubscriptions('token');
+PubSubScId.countSubscriptions('token');
 // count by token from all topics
 ```
 
@@ -147,10 +147,10 @@ PubSub.countSubscriptions('token');
 ### Error Handling
 ```javascript
 // isPublished is a boolean that represents if any subscribers was registered for this topic
-var isPublished = PubSub.publish('a');
+var isPublished = PubSubScId.publish('a');
 
 // token will be false if something went wrong and subscriber was not registered
-var token = PubSub.subscribe('MY TOPIC', mySubscriber); 
+var token = PubSubScId.subscribe('MY TOPIC', mySubscriber);
 ```
 
 ### Hierarchical addressing
@@ -162,7 +162,7 @@ var myToplevelSubscriber = function (msg, data) {
 }
 
 // subscribe to all topics in the 'car' hierarchy
-PubSub.subscribe('car', myToplevelSubscriber);
+PubSubScId.subscribe('car', myToplevelSubscriber);
 
 // create a subscriber to receive only leaf topic from hierarchy op topics
 var mySpecificSubscriber = function (msg, data) {
@@ -170,12 +170,12 @@ var mySpecificSubscriber = function (msg, data) {
 }
 
 // subscribe only to 'car.drive' topics
-PubSub.subscribe('car.drive', mySpecificSubscriber);
+PubSubScId.subscribe('car.drive', mySpecificSubscriber);
 
 // Publish some topics
-PubSub.publish('car.purchase', {name: 'my new car'});
-PubSub.publish('car.drive', {speed: '14'});
-PubSub.publish('car.sell', {newOwner: 'someone else'});
+PubSubScId.publish('car.purchase', {name: 'my new car'});
+PubSubScId.publish('car.drive', {speed: '14'});
+PubSubScId.publish('car.sell', {newOwner: 'someone else'});
 
 // In this scenario, myToplevelSubscriber will be called for all
 // topics, three times in total
@@ -195,19 +195,19 @@ when you make typos.
 
 ```javascript
 // 👎 Bad usage
-PubSub.subscribe('hello', function (msg, data) {
+PubSubScId.subscribe('hello', function (msg, data) {
 	console.log(data)
 });
 
-PubSub.publish('hello', 'world');
+PubSubScId.publish('hello', 'world');
 
 // 👍 Better usage
 var MY_TOPIC = 'hello';
-PubSub.subscribe(MY_TOPIC, function (msg, data) {
+PubSubScId.subscribe(MY_TOPIC, function (msg, data) {
 	console.log(data)
 });
 
-PubSub.publish(MY_TOPIC, 'world');
+PubSubScId.publish(MY_TOPIC, 'world');
 ```
 
 ### Example of use of "symbol constants" with ES6/7 syntax
@@ -218,11 +218,11 @@ export const MY_TOPIC = Symbol('MY_TOPIC')
 
 // somefile.js
 import { MY_TOPIC } from './event-types.js'
-PubSub.subscribe(MY_TOPIC, function (msg, data) {
+PubSubScId.subscribe(MY_TOPIC, function (msg, data) {
 	console.log(data)
 });
 
-PubSub.publish(MY_TOPIC, 'world');
+PubSubScId.publish(MY_TOPIC, 'world');
 ```
 
 ### Immediate Exceptions for stack traces in developer tools
@@ -234,7 +234,7 @@ This should be considered a development only option, as PubSubJS was designed to
 Setting immediate exceptions in development is easy, just tell PubSubJS about it after it has been loaded.
 
 ```javascript
-PubSub.immediateExceptions = true;
+PubSubScId.immediateExceptions = true;
 ```
 
 ## Contributing to PubSubJS

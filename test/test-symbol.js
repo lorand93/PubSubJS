@@ -1,7 +1,7 @@
 /* global Symbol */
 'use strict';
 
-var PubSub = require('../src/pubsub'),
+var PubSubScId = require('../src/pubsub'),
     assert = require('referee').assert;
 
 describe( 'subscribe and publish', function() {
@@ -14,8 +14,8 @@ describe( 'subscribe and publish', function() {
         var MESSAGE = Symbol('MESSAGE');
         var func = function(){ return undefined; };
 
-        PubSub.subscribe( MESSAGE, func );
-        
-        assert( PubSub.publish( MESSAGE ), true );
+        PubSubScId.subscribe( MESSAGE, func );
+
+        assert( PubSubScId.publish( MESSAGE ), true );
     });
 });

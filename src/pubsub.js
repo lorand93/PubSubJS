@@ -9,11 +9,11 @@
     'use strict';
 
     var PubSub = {};
-    root.PubSub = PubSub;
-
-    var define = root.define;
-
-    factory(PubSub);
+    if (typeof root.PubSub === 'undefined') {
+        root.PubSub = PubSub;
+        var define = root.define;
+        factory(PubSub);
+    }
 
     // AMD support
     if (typeof define === 'function' && define.amd){
@@ -182,7 +182,7 @@
         // and allow for easy use as key names for the 'messages' object
         var token = 'uid_' + String(++lastUid);
         messages[message][token] = func;
-        
+
         // return token for unsubscribing
         return token;
     };
@@ -230,7 +230,7 @@
         }
     };
 
-    /** 
+    /**
        Count subscriptions by the topic
      * @function
      * @public
@@ -248,8 +248,8 @@
         return count;
     };
 
-    
-    /** 
+
+    /**
        Gets subscriptions by the topic
      * @function
      * @public

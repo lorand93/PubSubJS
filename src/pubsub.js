@@ -7,13 +7,14 @@
 
 (function (root, factory){
     'use strict';
+    if (typeof root.PubSub !== 'undefined') {
+        return;
+    }
 
     var PubSub = {};
-    if (typeof root.PubSub === 'undefined') {
-        root.PubSub = PubSub;
-        var define = root.define;
-        factory(PubSub);
-    }
+    root.PubSub = PubSub;
+    var define = root.define;
+    factory(PubSub);
 
     // AMD support
     if (typeof define === 'function' && define.amd){

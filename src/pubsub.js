@@ -7,10 +7,6 @@
 
 (function (root, factory){
     'use strict';
-    if (typeof root.PubSubScId !== 'undefined') {
-        return;
-    }
-
     var PubSubScId = {};
     root.PubSubScId = PubSubScId;
     var define = root.define;
